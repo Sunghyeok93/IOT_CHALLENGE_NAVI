@@ -1,0 +1,84 @@
+require('dotenv').config();
+
+const { URL } = require('url');
+const { TMAP_API_KEY } = process.env;
+const request = require('./request');
+const POI_URL = 'https://api2.sktelecom.com/tmap/pois';
+const NAVI_URL = 'https://api2.sktelecom.com/tmap/routes/pedestrian';
+const poiUrl = new URL(POI_URL);
+const naviUrl = new URL(NAVI_URL);
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json; charset=UTF-8',
+  'User-Agent': 'Super Agent/0.0.1'
+};
+
+const searchKeyword = process.argv[2]; // 목적지
+
+// 출발지, 도착지 위치 정보
+// Latitude = 위도 , Longitude = 경도
+// 도착지의 경우 TMAP의 POI 검색을 통해 RP FLAG 값을 받아와야 함.
+const startLatitude = 37.49427057802677;
+const startLongitude = 126.9562342017889;
+
+const getPath = async () => {
+  // 목적지 정보 받기
+  poiUrl.searchParams.set('version', 1);
+  poiUrl.searchParams.set('searchKeyword', searchKeyword);
+  poiUrl.searchParams.set('page', 1);
+  poiUrl.searchParams.set('count', 1);
+  poiUrl.searchParams.set('searchType', 'all'); // 명칭검색
+  poiUrl.searchParams.set('resCoordType', 'WGS84GEO');
+  poiUrl.searchParams.set('searchtypCd', 'A'); // R이면 거리순 검색(Radius 입력해줘야), A는 정확도순
+  poiUrl.searchParams.set('appKey', TMAP_API_KEY);
+
+  const poiOptions = {
+    url: poiUrl.toString(),
+    method: 'GET',
+    headers
+  };
+
+  // 목적지 데이터 파싱
+  const poiResult = await request(poiOptions);
+  const poiJsonobj = JSON.parse(poiResult);
+  const data = poiJsonobj['searchPoiInfo']['pois']['poi'];
+  const endLatitude = data[0].frontLat;
+  const endLongitude = data[0].frontLon;
+  const endName = data[0].name;
+  const endRpFlag = data[0].rpFlag;
+  console.log('목적지 정보 수신 완료 : ' + endName);
+
+  // 목적지 까지의 경로 정보 받기
+  naviUrl.searchParams.set('version', 1);
+  naviUrl.searchParams.set('startX', startLongitude);
+  naviUrl.searchParams.set('startY', startLatitude);
+  naviUrl.searchParams.set('endX', endLongitude);
+  naviUrl.searchParams.set('endY', endLatitude);
+  // naviUrl.searchParams.set('angle', 0 ~ 359); // 방향데이터 => 전송시 어떤 결과를 주는지 알아봐야할 듯
+  // naviUrl.searchParams.set('speed', int값); // 진행속도(km/h)
+  naviUrl.searchParams.set('endRpFlag', endRpFlag);
+  // naviUrl.searchParams.set('endPoiId', String); // 목적지 POI ID
+  naviUrl.searchParams.set('startName', '우리');
+  naviUrl.searchParams.set('endName', endName);
+  naviUrl.searchParams.set('sort', 'index'); // 인덱스순 정렬
+  naviUrl.searchParams.set('resCoordType', 'WGS84GEO');
+  naviUrl.searchParams.set('callback', 'WGS84GEO');
+  naviUrl.searchParams.set('appKey', TMAP_API_KEY);
+
+  const naviOptions = {
+    url: naviUrl.toString(),
+    method: 'POST',
+    headers
+  };
+
+  // 경로 정보 파싱
+  const naviResult = await request(naviOptions);
+  const naviJsonObj = JSON.parse(naviResult);
+  const naviProperties = naviJsonObj['features'][0]['properties'];
+  const totalDistance = naviProperties['totalDistance'];
+  const totalTime = naviProperties['totalTime'];
+  console.log('경로 정보 수신 완료 : ' + totalDistance + '(m), ' + totalTime + '초 소요 예정');
+};
+
+getPath();
+

@@ -1,0 +1,27 @@
+{
+  "name": "tmap-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-react": "^7.10.0",
+    "nodemon": "^1.18.1",
+    "prettier": "^1.13.7"
+  },
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "node-red-contrib-artik-cloud": "^0.2.2",
+    "request": "^2.87.0",
+    "url": "^0.11.0"
+  },
+  "scripts": {
+    "dev": "node index"
+  }
+}
