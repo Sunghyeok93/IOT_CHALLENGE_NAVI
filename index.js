@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const fs = require('fs');
 const { URL } = require('url');
 const { TMAP_API_KEY } = process.env;
 const request = require('./request');
@@ -15,11 +15,39 @@ const headers = {
 
 const searchKeyword = process.argv[2]; // 목적지
 
+// gps value reader
+function gpsReader(){
+  const fileName = "/Users/sunghyeok/IOT_CHALLENGE_NAVI/gps.txt";
+  const contents = fs.readFileSync(fileName, 'utf8');
+  return JSON.parse(contents);
+}
+
 // 출발지, 도착지 위치 정보
 // Latitude = 위도 , Longitude = 경도
 // 도착지의 경우 TMAP의 POI 검색을 통해 RP FLAG 값을 받아와야 함.
-const startLatitude = 37.49427057802677;
-const startLongitude = 126.9562342017889;
+const startGps = gpsReader();
+const startLatitude = startGps['latitude'];
+const startLongitude = startGps['longitude'];
+//const startLatitude = 37.49427057802677;
+//const startLongitude = 126.9562342017889;
+
+
+// 점 사이 거리 구하는 함수
+function distance(lat1, lon1, lat2, lon2) {
+  var radlat1 = Math.PI * lat1/180;
+  var radlat2 = Math.PI * lat2/180;
+  var theta = lon1 - lon2;
+  var radtheta = Math.PI * theta/180;
+  var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  if (dist > 1) {
+      dist = 1;
+  }
+  dist = Math.acos(dist);
+  dist = dist * 180/Math.PI;
+  dist = dist * 60 * 1.1515;
+  dist = dist * 1609.344;
+  return dist;
+}
 
 const getPath = async () => {
   // 목적지 정보 받기
@@ -47,6 +75,7 @@ const getPath = async () => {
   const endName = data[0].name;
   const endRpFlag = data[0].rpFlag;
   console.log('목적지 정보 수신 완료 : ' + endName);
+  // console.log(poiResult);
 
   // 목적지 까지의 경로 정보 받기
   naviUrl.searchParams.set('version', 1);
@@ -78,7 +107,47 @@ const getPath = async () => {
   const totalDistance = naviProperties['totalDistance'];
   const totalTime = naviProperties['totalTime'];
   console.log('경로 정보 수신 완료 : ' + totalDistance + '(m), ' + totalTime + '초 소요 예정');
-};
+  // console.log(naviResult);
 
+
+
+  // 목적지까지의 포인트
+  const featureNum = Object.keys(naviJsonObj['features']).length;
+  var pointArray = new Array(featureNum);
+
+  var pointNum = 0; // 목적지까지 도달해야할 포인트 개수.
+  var currentPoint = 0; // 내가 현재 가고 있는 포인트 지점.
+  var j = 0;
+  for (var i = 0; i < featureNum; i++)
+  {
+    if(naviJsonObj['features'][i]['geometry']['type'] === 'Point'){
+      pointNum = pointNum + 1;
+      pointArray[j] = i;
+      j = j + 1;
+    }
+  }
+  // 목적지까지의 포인트들을 지나갈때마다 1이 증가하며 pointNum과 같아지면 목적지 도착.
+  //
+  console.log(pointArray);
+  while (1)
+  {
+    var currentGps = gpsReader();
+    currentLat = currentGps['latitude'];
+    currentLon = currentGps['longitude'];
+
+    if(currentPoint === pointNum) {
+      break;
+    }
+
+    if(distance(currentLat, currentLon, naviJsonObj['features'][currentPoint]['geometry']['coordinates'][1], naviJsonObj['features'][currentPoint]['geometry']['coordinates'][0]) < 5.0){
+      currentPoint = currentPoint + 1;
+      console.log(naviJsonObj['features'][currentPoint]['properties']['description']);
+    }
+
+  }
+  console.log(distance(startLatitude, startLongitude, 37.494398779177374, 126.95622508838453));
+};
 getPath();
 
+
+//const abc = global.get('myFunc');
