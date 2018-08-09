@@ -40,13 +40,19 @@ function distance(lat1, lon1, lat2, lon2) {
   var radtheta = Math.PI * theta/180;
   var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
   if (dist > 1) {
-      dist = 1;
+    dist = 1;
   }
   dist = Math.acos(dist);
   dist = dist * 180/Math.PI;
   dist = dist * 60 * 1.1515;
   dist = dist * 1609.344;
+
   return dist;
+}
+
+function sleep(ms){
+  ts1 = new Date().getTime() + ms;
+  do ts2 = new Date().getTime(); while (ts2<ts1);
 }
 
 const getPath = async () => {
@@ -109,8 +115,6 @@ const getPath = async () => {
   console.log('경로 정보 수신 완료 : ' + totalDistance + '(m), ' + totalTime + '초 소요 예정');
   // console.log(naviResult);
 
-
-
   // 목적지까지의 포인트
   const featureNum = Object.keys(naviJsonObj['features']).length;
   var pointArray = new Array(featureNum);
@@ -129,6 +133,7 @@ const getPath = async () => {
   // 목적지까지의 포인트들을 지나갈때마다 1이 증가하며 pointNum과 같아지면 목적지 도착.
   //
   console.log(pointArray);
+
   while (1)
   {
     var currentGps = gpsReader();
@@ -136,6 +141,7 @@ const getPath = async () => {
     currentLon = currentGps['longitude'];
 
     if(currentPoint === pointNum) {
+      console.log('목적지에 도착했습니다.');
       break;
     }
 
@@ -144,7 +150,9 @@ const getPath = async () => {
       console.log(naviJsonObj['features'][currentPoint]['properties']['description']);
     }
 
+    sleep(5000);
   }
+
   console.log(distance(startLatitude, startLongitude, 37.494398779177374, 126.95622508838453));
 };
 getPath();
