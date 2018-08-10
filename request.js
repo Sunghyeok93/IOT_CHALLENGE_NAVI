@@ -7,3 +7,4 @@ module.exports = (option = { encoding: null }) =>
       return resolve(body);
     });
   });
+
