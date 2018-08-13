@@ -1,6 +1,38 @@
+var sys = require('sys');
+var exec = require('child_process').exec;
+function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
+
+// stt, tts
+const execPromise = str => {
+  return new Promise ((resolve, reject) => {
+    exec(str, (err, stdout, stderr) => {
+      if(err) reject (err);
+      else resolve(stdout);
+  })
+  })
+};
+async function ttsCommand(msg) {
+  var commandLine = 'python3.6 /root/tts.py ' + msg;
+  await execPromise(commandLine);
+}
+
+async function sttCommand(second) {
+  var ttsCmd = "python3.6 /root/python-docs-samples/speech/cloud-client/quickstart.py";
+  var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
+  await execPromise(recordCmd);
+  const stdout = await execPromise(ttsCmd);
+  return stdout;
+}
+    
+
+
 
 module.exports = {
-  naviModule : function(searchKeyword){
+  naviModule : async function(){
+    await ttsCommand("목적지를 말씀하세요.");
+    searchKeyword = await sttCommand('2');
+    console.log(searchKeyword);
+  
     require('dotenv').config();
     const fs = require('fs');
     const { URL } = require('url');
@@ -17,11 +49,10 @@ module.exports = {
     };
     // gps value reader
     function gpsReader(){
-      const fileName = "/Users/sunghyeok/IOT_CHALLENGE_NAVI/gps.txt";
+      const fileName = "/root/gps.txt";
       const contents = fs.readFileSync(fileName, 'utf8');
       return JSON.parse(contents);
     }
-
     // 출발지, 도착지 위치 정보
     // Latitude = 위도 , Longitude = 경도
     // 도착지의 경우 TMAP의 POI 검색을 통해 RP FLAG 값을 받아와야 함.
@@ -115,6 +146,14 @@ module.exports = {
       console.log('경로 정보 수신 완료 : ' + totalDistance + '(m), ' + totalTime + '초 소요 예정');
       // console.log(naviResult);
 
+      searchKeyword = searchKeyword.replace('\n', '');
+      await ttsCommand(searchKeyword + " 맞습니까?");
+      destinationCheck = await sttCommand('2');
+      console.log(destinationCheck);
+      if(destinationCheck.indexOf("아니오")>-1){
+        return; ///거절 시 프로그램 종료
+      }
+
       // 목적지까지의 포인트
       const featureNum = Object.keys(naviJsonObj['features']).length;
       var pointArray = new Array(featureNum);
@@ -134,25 +173,28 @@ module.exports = {
       //
       console.log(pointArray);
       console.log(naviResult);
-      // while (1)
-      // {
-      //   var currentGps = gpsReader();
-      //   currentLat = currentGps['latitude'];
-      //   currentLon = currentGps['longitude'];
-      //
-      //   if(currentPoint === pointNum) {
-      //     console.log('목적지에 도착했습니다.');
-      //     break;
-      //   }
-      //
-      //   if(distance(currentLat, currentLon, naviJsonObj['features'][currentPoint]['geometry']['coordinates'][1], naviJsonObj['features'][currentPoint]['geometry']['coordinates'][0]) < 5.0){
-      //     currentPoint = currentPoint + 1;
-      //     console.log(naviJsonObj['features'][currentPoint]['properties']['description']);
-      //   }
-      //
-      //   sleep(3000);
-      //
-      // };
+      while (1)
+      {
+        var currentGps = gpsReader();
+        currentLat = currentGps['latitude'];
+        currentLon = currentGps['longitude'];
+        console.log('la : ' + latitude + 'long : ' + longitude);
+      
+      
+        if(currentPoint === pointNum) {
+          console.log('목적지에 도착했습니다.');
+          await ttsCommand("목적지에 도착했습니다.");
+          break;
+        }
+      
+        if(distance(currentLat, currentLon, naviJsonObj['features'][currentPoint]['geometry']['coordinates'][1], naviJsonObj['features'][currentPoint]['geometry']['coordinates'][0]) < 5.0){
+          currentPoint = currentPoint + 1;
+          console.log(naviJsonObj['features'][currentPoint]['properties']['description']);
+        }
+        console.log('currentPoint : ' + currentPoint);
+        sleep(3000);
+      
+      };
     }
   getPath();
   }
