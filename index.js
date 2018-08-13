@@ -17,7 +17,7 @@ async function ttsCommand(msg) {
 }
 
 async function sttCommand(second) {
-  var ttsCmd = "python3.6 /root/python-docs-samples/speech/cloud-client/quickstart.py";
+  var ttsCmd = "python3 /root/python-docs-samples/speech/cloud-client/quickstart.py";
   var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
   await execPromise(recordCmd);
   const stdout = await execPromise(ttsCmd);
@@ -153,6 +153,7 @@ module.exports = {
       if(destinationCheck.indexOf("아니오")>-1){
         return; ///거절 시 프로그램 종료
       }
+      if(destinationCheck.indexOf("아니요")>-1){return;}
 
       // 목적지까지의 포인트
       const featureNum = Object.keys(naviJsonObj['features']).length;
@@ -172,13 +173,14 @@ module.exports = {
       // 목적지까지의 포인트들을 지나갈때마다 1이 증가하며 pointNum과 같아지면 목적지 도착.
       //
       console.log(pointArray);
+      console.log('pointNum : ' + pointNum);
       console.log(naviResult);
       while (1)
       {
         var currentGps = gpsReader();
         currentLat = currentGps['latitude'];
         currentLon = currentGps['longitude'];
-        console.log('la : ' + latitude + 'long : ' + longitude);
+        console.log(currentLat + ', ' + currentLon);
       
       
         if(currentPoint === pointNum) {
@@ -186,11 +188,13 @@ module.exports = {
           await ttsCommand("목적지에 도착했습니다.");
           break;
         }
-      
-        if(distance(currentLat, currentLon, naviJsonObj['features'][currentPoint]['geometry']['coordinates'][1], naviJsonObj['features'][currentPoint]['geometry']['coordinates'][0]) < 5.0){
+        var dst = distance(currentLat, currentLon, naviJsonObj['features'][pointArray[currentPoint]]['geometry']['coordinates'][1], naviJsonObj['features'][pointArray[currentPoint]]['geometry']['coordinates'][0]);
+        if(dst < 19.0){
+          //console.log(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
+          await ttsCommand(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
           currentPoint = currentPoint + 1;
-          console.log(naviJsonObj['features'][currentPoint]['properties']['description']);
         }
+	console.log('거리  : ',dst);
         console.log('currentPoint : ' + currentPoint);
         sleep(3000);
       

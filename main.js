@@ -31,7 +31,7 @@ async function ttsCommand(msg) {
 }
 
 async function sttCommand(second) {
-  var ttsCmd = "python3.6 /root/python-docs-samples/speech/cloud-client/quickstart.py";
+  var ttsCmd = "python3 /root/python-docs-samples/speech/cloud-client/quickstart.py";
   var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
   await execPromise(recordCmd);
   const stdout = await execPromise(ttsCmd);
