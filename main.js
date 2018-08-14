@@ -2,7 +2,10 @@ navi = require('./index');
 cam = require('./cam');
 var sys = require('sys');
 var exec = require('child_process').exec;
+var buttonPress;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
+
+
 
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -16,10 +19,17 @@ const execPromise = str => {
 function menuCheck(menu){
   if(menu.indexOf("길 찾")>-1){
      menu= "길 찾기";
+     return menu;
   }
-  if(menu.indexOf("사진"")>-1){
-    menu= "사진 촬영"";
+  if(menu.indexOf("사진")>-1){
+    menu= "사진 촬영";
+    return menu;
  }
+  if(menu.indexOf("종료")>-1){
+    menu = "종료";
+    return menu;
+}
+  menu = "없음";
   return menu;
 }
 
@@ -44,6 +54,7 @@ async function sttCommand(second) {
 
 var Gpio = require('onoff').Gpio
 var button = new Gpio(26, 'in', 'both')
+buttonPress = 0;
 button.watch(async function (error, value) {
   if(buttonPress===0){
     if (error) {
@@ -54,7 +65,7 @@ button.watch(async function (error, value) {
     if (value === 0) {
       console.log('pressed');
       buttonPress = 1;
-      await main();
+      main();
     }
   }
 })
@@ -63,17 +74,17 @@ async function main(){
     //1. 메뉴 보기
    await ttsCommand("사용하실 메뉴를 말씀해주십시오.");
     menu = await sttCommand('2');
+    console.log(menu);
     menu = menuCheck(menu);
-    navi.naviModule()
     //2. 사용자 메뉴 선택 받아들이기.
     switch(menu){
-      case '길 찾기' : console.log(menu); await navi.naviModule(); buttonPress = 0; break;
+      case '길 찾기' : console.log(menu); await navi.naviModule(); break;
 
-      case '사진 촬영' : console.log(menu); cam.camModule(); break;
+      case '사진 촬영' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
 
+      case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
 
-
-
+      case '종료' : console.log(menu); await ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
 
     }
 

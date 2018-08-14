@@ -49,25 +49,31 @@ module.exports = {
     };
     // gps value reader  서버와 Http 통신
     async function gpsReader(){
-      // const fileName = "/root/gps.txt";
+      
+// const fileName = "/root/gps.txt";
       // const contents = fs.readFileSync(fileName,신 'utf8');
       const GPS_URL = 'http://ec2-52-79-239-17.ap-northeast-2.compute.amazonaws.com:5000/gpsartik';
       const gpsUrl = new URL(GPS_URL);
       const gpsOptions = {
         url: gpsUrl.toString(),
+
           method: 'GET',
           headers
         };
       const gpsResult = await request(gpsOptions);
+      console.log(gpsResult);
 
       return JSON.parse(gpsResult);
     }
     // 출발지, 도착지 위치 정보
     // Latitude = 위도 , Longitude = 경도
     // 도착지의 경우 TMAP의 POI 검색을 통해 RP FLAG 값을 받아와야 함.
-    const startGps = gpsReader();
+    const startGps = await gpsReader();
+    console.log(startGps);
     const startLatitude = startGps['latitude'];
     const startLongitude = startGps['longitude'];
+    console.log('la'+startLatitude);
+    console.log('la'+startLongitude);
     // const startLatitude = 37.49427057802677;
     // const startLongitude = 126.9562342017889;
 
@@ -148,6 +154,7 @@ module.exports = {
 
       // 경로 정보 파싱
       const naviResult = await request(naviOptions);
+      console.log(naviResult);
       const naviJsonObj = JSON.parse(naviResult);
       const naviProperties = naviJsonObj['features'][0]['properties'];
       const totalDistance = naviProperties['totalDistance'];
@@ -186,7 +193,7 @@ module.exports = {
       console.log(naviResult);
       while (1)
       {
-        var currentGps = gpsReader();
+        var currentGps = await gpsReader();
         currentLat = currentGps['latitude'];
         currentLon = currentGps['longitude'];
         console.log(currentLat + ', ' + currentLon);
@@ -199,7 +206,7 @@ module.exports = {
         }
         var dst = distance(currentLat, currentLon, naviJsonObj['features'][pointArray[currentPoint]]['geometry']['coordinates'][1], naviJsonObj['features'][pointArray[currentPoint]]['geometry']['coordinates'][0]);
         if(dst < 19.0){
-          //console.log(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
+          console.log(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
           await ttsCommand(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
           currentPoint = currentPoint + 1;
         }
