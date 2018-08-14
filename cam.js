@@ -2,7 +2,25 @@ var NodeWebcam = require('node-webcam')
 const fs = require('fs');
 const request = require('request');
 
+var sys = require('sys');
+var exec = require('child_process').exec;
+function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
+
 var Webcam = NodeWebcam.create();
+
+async function ttsCommand(msg) {
+  var commandLine = 'python3.6 /root/tts.py ' + msg;
+  await execPromise(commandLine);
+}
+
+const execPromise = str => {
+  return new Promise ((resolve, reject) => {
+    exec(str, (err, stdout, stderr) => {
+      if(err) reject (err);
+      else resolve(stdout);
+  })
+  })
+};
 
 const captureImage = path => new Promise ((resolve, reject) => {
   Webcam.capture(path, (err, data) => {
@@ -11,19 +29,31 @@ const captureImage = path => new Promise ((resolve, reject) => {
   })
 });
 
+const fileSend = (url, key, filepath, filename) =>
+ new Promise((resolve, reject) => {
+   const r = request.post(url, (err, response, body) => {
+     if (err) reject(err);
+     else resolve(body);
+   });
+   const form = r.form();
+   form.append(key, fs.createReadStream(filepath), {
+     filename
+   });
+ });
+
 module.exports = {
   camModule : async function(){
     await captureImage('/root/image');
 
+    result = await fileSend(
+      'http://ec2-52-79-239-17.ap-northeast-2.compute.amazonaws.com:5000/image',
+      'abc',
+      '/root/image.jpg',
+      'image.jpg'
+     )
     
-    const r = request.post('http://ec2-52-79-239-17.ap-northeast-2.compute.amazonaws.com:5000/test',(err, response, body) => {
-      if (err) throw new Error(err);
-      console.log(body);
-    });
-    const form = r.form();
-    form.append('abc', fs.createReadStream('/root/image.jpg'), { filename: 'image.jpg' });
-  
-    
+     await ttsCommand(result);
+
   }
 };
 
