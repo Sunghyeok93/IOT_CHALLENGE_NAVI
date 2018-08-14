@@ -47,11 +47,20 @@ module.exports = {
       'Content-Type': 'application/json; charset=UTF-8',
       'User-Agent': 'Super Agent/0.0.1'
     };
-    // gps value reader
-    function gpsReader(){
-      const fileName = "/root/gps.txt";
-      const contents = fs.readFileSync(fileName, 'utf8');
-      return JSON.parse(contents);
+    // gps value reader  서버와 Http 통신
+    async function gpsReader(){
+      // const fileName = "/root/gps.txt";
+      // const contents = fs.readFileSync(fileName,신 'utf8');
+      const GPS_URL = 'http://ec2-52-79-239-17.ap-northeast-2.compute.amazonaws.com:5000/gpsartik';
+      const gpsUrl = new URL(GPS_URL);
+      const gpsOptions = {
+        url: gpsUrl.toString(),
+          method: 'GET',
+          headers
+        };
+      const gpsResult = await request(gpsOptions);
+
+      return JSON.parse(gpsResult);
     }
     // 출발지, 도착지 위치 정보
     // Latitude = 위도 , Longitude = 경도
@@ -200,6 +209,6 @@ module.exports = {
       
       };
     }
-  getPath();
+  await getPath();
   }
 };
