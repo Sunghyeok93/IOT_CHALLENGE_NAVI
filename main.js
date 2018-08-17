@@ -5,8 +5,8 @@ var exec = require('child_process').exec;
 var buttonPress;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 kakao = require('./kakao');
-const tokenFile = '/root/token.txt'
-
+const tokenFile = '/root/IOT_CHALLENGE_NAVI/token.txt'
+var fs = require('fs');
 
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -42,7 +42,7 @@ if(menu.indexOf("카카오")>-1){
   return menu;
 }
 
-async functhin sendKakaoMessage(){
+async function sendKakaoMessage(){
   var tokenRead = fs.readFileSync(tokenFile, 'utf8');
   var tokenJson = JSON.parse(tokenRead);
   var accessToken = tokenJson['access_token'];
