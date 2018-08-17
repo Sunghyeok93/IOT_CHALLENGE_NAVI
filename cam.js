@@ -46,7 +46,7 @@ module.exports = {
     await captureImage('/root/image');
 
     result = await fileSend(
-      'http://ec2-52-79-239-17.ap-northeast-2.compute.amazonaws.com:5000/image',
+      'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/image',
       'abc',
       '/root/image.jpg',
       'image.jpg'

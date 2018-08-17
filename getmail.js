@@ -26,7 +26,7 @@ module.exports = {
         mail = await sttCommand('2');
         console.log(mail);
         
-        const MAIL_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/mail';
+        const MAIL_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/mail';
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
         url: mailUrl.toString(),

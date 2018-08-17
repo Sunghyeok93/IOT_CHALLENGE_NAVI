@@ -52,7 +52,7 @@ module.exports = {
       
 // const fileName = "/root/gps.txt";
       // const contents = fs.readFileSync(fileName,신 'utf8');
-      const GPS_URL = 'http://ec2-52-79-239-17.ap-northeast-2.compute.amazonaws.com:5000/gpsartik';
+      const GPS_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/gpsartik';
       const gpsUrl = new URL(GPS_URL);
       const gpsOptions = {
         url: gpsUrl.toString(),
