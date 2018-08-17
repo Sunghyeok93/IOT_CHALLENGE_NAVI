@@ -22,11 +22,8 @@ async function ttsCommand(msg) {
 
 module.exports = {
     camModule : async function(){
-        await ttsCommand("보내실 메시지를 말씀하세요.");
-        mail = await sttCommand('2');
-        console.log(mail);
-        
-        const MAIL_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/mail';
+
+        const MAIL_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/getmail';
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
         url: mailUrl.toString(),
@@ -36,12 +33,11 @@ module.exports = {
         const mailResult = await request(mailOptions);
         console.log(mailResult);
         
-        if(mailResult === 200){
-            await ttsCommand("메시지가 정상 전달 되었습니다.");
-        }
-        else{
-            await ttsCommand("메시지 전송 실패.");
-        }
+        ////////////////////
+        ///결과 JSON 처리
+        ////////////////////
+        
+        
     
 
 

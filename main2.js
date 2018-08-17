@@ -1,10 +1,10 @@
 var fs = require('fs');
 kakao = require('./kakao');
-const tokenFile = '/Users/sunghyeok/tmap-navigation/token.txt'
+const tokenFile = '/root/token.txt'
 
 async function main(){
 
-  한달에 한번 사용자 코드 초기화
+  //한달에 한번 사용자 코드 초기화
   var returnValue = await kakao.accessModule();
   if(returnValue !== false) {
     var tokenString = JSON.stringify(returnValue);
@@ -13,6 +13,7 @@ async function main(){
   else {
     console.log('사용자 초기화 실패');
   }
+
 
   // 카카오톡 보내기 기능
   var tokenRead = fs.readFileSync(tokenFile, 'utf8');
@@ -27,11 +28,15 @@ async function main(){
     if(await kakao.refreshModule(refreshToken)){
       console.log('갱신 성공');
       //다시 카카오톡 보내기 기능 실행
+
+    
     }
     else{
       console.log('사용자 초기화 과정이 필요합니다.');
     }
   }
+
+
   await kakao.refreshModule(refreshToken);
 
 

@@ -4,7 +4,8 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 var buttonPress;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
-
+kakao = require('./kakao');
+const tokenFile = '/root/token.txt'
 
 
 const execPromise = str => {
@@ -25,6 +26,14 @@ function menuCheck(menu){
     menu= "사진 촬영";
     return menu;
  }
+ if(menu.indexOf("긴급")>-1){
+  menu= "카카오";
+  return menu;
+}
+if(menu.indexOf("카카오")>-1){
+  menu= "카카오";
+  return menu;
+}
   if(menu.indexOf("종료")>-1){
     menu = "종료";
     return menu;
@@ -33,6 +42,28 @@ function menuCheck(menu){
   return menu;
 }
 
+async functhin sendKakaoMessage(){
+  var tokenRead = fs.readFileSync(tokenFile, 'utf8');
+  var tokenJson = JSON.parse(tokenRead);
+  var accessToken = tokenJson['access_token'];
+  var refreshToken = tokenJson['refresh_token'];
+  if(await kakao.sendModule(accessToken)){
+    console.log('카카오톡 메시지를 전송하였습니다.');
+  }
+  else{
+    // 메세지 전송 실패시 토큰 갱신
+    if(await kakao.refreshModule(refreshToken)){
+      console.log('갱신 성공');
+      //다시 카카오톡 보내기 기능 실행
+
+    
+    }
+    else{
+      console.log('사용자 초기화 과정이 필요합니다.');
+    }
+  }
+
+}
 
 function sleep(ms){
   var ts1 = new Date().getTime() + ms;
@@ -81,6 +112,8 @@ async function main(){
       case '길 찾기' : console.log(menu); await navi.naviModule(); break;
 
       case '사진 촬영' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
+
+      case '카카오' : console.log(menu); await sendKakaoMessage(); buttonPress = 0; break;
 
       case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
 
