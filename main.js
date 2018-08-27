@@ -1,3 +1,4 @@
+video = require('./video');
 navi = require('./index');
 cam = require('./cam');
 var sys = require('sys');
@@ -49,20 +50,23 @@ async function sendKakaoMessage(){
   var refreshToken = tokenJson['refresh_token'];
   if(await kakao.sendModule(accessToken)){
     console.log('카카오톡 메시지를 전송하였습니다.');
+    return;
   }
   else{
     // 메세지 전송 실패시 토큰 갱신
     if(await kakao.refreshModule(refreshToken)){
       console.log('갱신 성공');
       //다시 카카오톡 보내기 기능 실행
-
-    
+      tokenRead = fs.readFileSync(tokenFile, 'utf8');
+      tokenJson = JSON.parse(tokenRead);
+      accessToken = tokenJson['access_token'];
+      await kakao.sendModule(accessToken);
     }
     else{
       console.log('사용자 초기화 과정이 필요합니다.');
     }
   }
-
+  return;
 }
 
 function sleep(ms){
@@ -101,6 +105,8 @@ button.watch(async function (error, value) {
   }
 })
 
+video.videoModule();
+
 async function main(){
     //1. 메뉴 보기
    await ttsCommand("사용하실 메뉴를 말씀해주십시오.");
@@ -126,4 +132,3 @@ async function main(){
 
 
 }
-
