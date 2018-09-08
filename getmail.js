@@ -23,7 +23,7 @@ async function ttsCommand(msg) {
 module.exports = {
     camModule : async function(){
 
-        const MAIL_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/getmail';
+        const MAIL_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/voicemail';
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
         url: mailUrl.toString(),
@@ -33,10 +33,7 @@ module.exports = {
         const mailResult = await request(mailOptions);
         console.log(mailResult);
         
-        ////////////////////
-        ///결과 JSON 처리
-        ////////////////////
-        
+        await ttsCommand(mailResult);
         
     
 

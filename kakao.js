@@ -2,7 +2,7 @@ var fs = require('fs');
 const { URL } = require('url');
 const request = require('./request');
 require('dotenv').config();
-const tokenFile = '/Users/sunghyeok/tmap-navigation/token.txt'
+const tokenFile = '/root/IOT_CHALLENGE_NAVI/token.txt'
 const KAKAO_OAUTH_URL = 'https://kauth.kakao.com/oauth/token';
 const KAKAO_SEND_URL = 'https://kapi.kakao.com/v2/api/talk/memo/send';
 const KAKAO_REFRESH_URL = 'https://kauth.kakao.com/oauth/token';
