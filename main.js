@@ -25,10 +25,14 @@ function menuCheck(menu){
      menu= "길 찾기";
      return menu;
   }
-  if(menu.indexOf("사진")>-1){
-    menu= "사진 촬영";
+  if(menu.indexOf("분석")>-1){
+    menu= "사진 분석";
     return menu;
- }
+  }
+  if(menu.indexOf("저장")>-1){
+    menu= "사진첩 저장";
+    return menu;
+  }
   if(menu.indexOf("긴급")>-1){
     menu= "카카오";
     return menu;
@@ -145,7 +149,9 @@ async function main(){
     switch(menu){
       case '길 찾기' : console.log(menu); await navi.naviModule(); break;
 
-      case '사진 촬영' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
+      case '사진 분석' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
+
+      case '사진첩 저장' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
 
       case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       

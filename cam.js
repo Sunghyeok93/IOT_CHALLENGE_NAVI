@@ -55,6 +55,15 @@ module.exports = {
      await ttsCommand(result);
   },
 
+  photoBookModule :async function(){
+      await captureImage('/root/photobook');
+      await fileSend(
+        'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/photobook',
+        'abc',
+        '/root/image.jpg',
+        'image.jpg'
+       )
+    },
 
   objectCamModule : async function(){
     await ttsCommand("찾으려는 물건을 말씀하세요.");
