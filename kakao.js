@@ -28,7 +28,7 @@ module.exports = {
           'grant_type' : 'authorization_code',
           'client_id' : 'ed09e5952335dc94545041c3a532e490',
           'redirect_uri' : 'http://localhost:5000/oauth',
-          'code' : 'gifd0RouRFKIlZZrsYorRa1qS7nS7TMdNztd3X-u9QbGyzPh76B4WPvL8puLdvuetYv2DQo8BhkAAAFlRuoPVQ' // user_token 값 넣을것
+          'code' : 'Pis4QpAoANsZjOv5JVJkRQIGXPUKkojRycP0dUNyTFUUJK75Q2t3S25HI4DBS8q0FUP42Ao8BkMAAAFluRf6Dg' // user_token 값 넣을것
         }
       };
 
@@ -97,8 +97,11 @@ module.exports = {
         var tokenRead = fs.readFileSync(tokenFile, 'utf8');
         var tokenJson = JSON.parse(tokenRead);
         tokenJson['access_token'] = jsonData['access_token'];
-
-        console.log(tokenJson);
+	
+	tokenString = JSON.stringify(tokenJson);
+	console.log('###');
+	console.log(tokenJson.stringify);
+	fs.writeFileSync(tokenFile, tokenString , 'utf8')
         return true;
       }
       else

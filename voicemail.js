@@ -31,7 +31,7 @@ module.exports = {
         const mailOptions = {
         url: mailUrl.toString(),
           method: 'POST',
-          headers
+          headers,
 	  body:{content:mail,sender:"ARTIK"}
         };
         const mailResult = await request(mailOptions);

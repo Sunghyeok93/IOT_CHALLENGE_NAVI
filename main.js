@@ -1,6 +1,8 @@
 video = require('./video');
 navi = require('./index');
 cam = require('./cam');
+sendmail = require('./voicemail');
+checkmail = require('./getmail');
 var sys = require('sys');
 var exec = require('child_process').exec;
 var buttonPress;
@@ -39,6 +41,8 @@ if(menu.indexOf("카카오")>-1){
     menu = "종료";
     return menu;
 }
+  if(menu.indexOf("메시지")>-1){menu = "보내기"; return menu;}
+  if(menu.indexOf("사서함")>-1){menu = "사서함"; return menu}
   menu = "없음";
   return menu;
 }
@@ -60,6 +64,7 @@ async function sendKakaoMessage(){
       tokenRead = fs.readFileSync(tokenFile, 'utf8');
       tokenJson = JSON.parse(tokenRead);
       accessToken = tokenJson['access_token'];
+      //fs.writeFileSync(tokenFile, accessToken, 'utf8');
       await kakao.sendModule(accessToken);
     }
     else{
@@ -120,6 +125,8 @@ async function main(){
       case '사진 촬영' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
 
       case '카카오' : console.log(menu); await sendKakaoMessage(); buttonPress = 0; break;
+
+      
 
       case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
 
