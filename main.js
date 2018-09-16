@@ -33,10 +33,6 @@ function menuCheck(menu){
     menu= "카카오";
     return menu;
 }
-  if(menu.indexOf("카카오")>-1){
-    menu= "카카오";
-    return menu;
-}
   if(menu.indexOf("물건")>-1){
     menu= "물건 찾기";
     return menu;
@@ -96,10 +92,15 @@ async function sttCommand(second) {
   return stdout;
 }
 
+async function soundCommand(filename){
+  var commandLine = 'mpg321 ~/sound/'+filename;
+  await execPromise(commandLine);
+}
+
 var Gpio = require('onoff').Gpio
-var button = new Gpio(26, 'in', 'both')
+var buttonGreen = new Gpio(26, 'in', 'both')
 buttonPress = 0;
-button.watch(async function (error, value) {
+buttonGreen.watch(async function (error, value) {
   if(buttonPress===0){
     if (error) {
       console.error(error)
@@ -113,12 +114,30 @@ button.watch(async function (error, value) {
     }
   }
 })
+yellowPress = 0;
+var buttonYellow = new Gpio(25, 'in','both')
+buttonYellow.watch(async function (error, value){
+  if(yellowPress===0){
+    console.log('yellow');
+    yellowPress=1;
+    await sendKakaoMessage();
+    yellowPress=0;
+  }
+})
+
+var buttonBlack = new Gpio(41, 'in','both')
+buttonBlack.watch(async function (eroor, value){
+  console.log('black');
+  process.exit(1);
+})
 
 video.videoModule();
 
 async function main(){
-    //1. 메뉴 보기
-   await ttsCommand("사용하실 메뉴를 말씀해주십시오.");
+   
+
+ //1. 메뉴 보기
+   await soundCommand("start.mp3");
     menu = await sttCommand('2');
     console.log(menu);
     menu = menuCheck(menu);
@@ -127,8 +146,6 @@ async function main(){
       case '길 찾기' : console.log(menu); await navi.naviModule(); break;
 
       case '사진 촬영' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
-
-      case '카카오' : console.log(menu); await sendKakaoMessage(); buttonPress = 0; break;
 
       case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       

@@ -23,6 +23,10 @@ async function sttCommand(second) {
   const stdout = await execPromise(ttsCmd);
   return stdout;
 }
+async function soundCommand(filename){
+  var commandLine = 'mpg321 ~/sound/'+filename;
+  await execPromise(commandLine);
+}
     
 
 
@@ -120,6 +124,7 @@ module.exports = {
 
       // 목적지 데이터 파싱
       const poiResult = await request(poiOptions);
+      console.log(poiResult);
       const poiJsonobj = JSON.parse(poiResult);
       const data = poiJsonobj['searchPoiInfo']['pois']['poi'];
       const endLatitude = data[0].frontLat;

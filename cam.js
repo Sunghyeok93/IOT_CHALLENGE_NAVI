@@ -53,7 +53,7 @@ module.exports = {
      )
     
      await ttsCommand(result);
-  }
+  },
 
 
   objectCamModule : async function(){
