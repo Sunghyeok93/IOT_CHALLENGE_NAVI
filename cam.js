@@ -53,7 +53,40 @@ module.exports = {
      )
     
      await ttsCommand(result);
+  }
 
+
+  objectCamModule : async function(){
+    await ttsCommand("찾으려는 물건을 말씀하세요.");
+    searchKeyword = await sttCommand('2');
+    const FIND_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject';
+    const findObjectUrl = new URL(FIND_URL);
+    const findOptions = {
+      url: findObjectUrl.toString(),
+      method: "GET",
+      headers,
+      body: {
+        object: searchKeyword.toString()
+      }
+    };
+
+
+    while(1){
+      await captureImage('/root/imgae');
+  
+      result = await fileSend(
+        'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject',
+        'abc',
+        '/root/image.jpg',
+        'image.jpg'
+       )
+       if(result==0){
+        continue;
+       }else{
+        await ttsCommand(result);
+        break;
+       }
+    }
   }
 };
 

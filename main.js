@@ -29,13 +29,17 @@ function menuCheck(menu){
     menu= "사진 촬영";
     return menu;
  }
- if(menu.indexOf("긴급")>-1){
-  menu= "카카오";
-  return menu;
+  if(menu.indexOf("긴급")>-1){
+    menu= "카카오";
+    return menu;
 }
-if(menu.indexOf("카카오")>-1){
-  menu= "카카오";
-  return menu;
+  if(menu.indexOf("카카오")>-1){
+    menu= "카카오";
+    return menu;
+}
+  if(menu.indexOf("물건")>-1){
+    menu= "물건 찾기";
+    return menu;
 }
   if(menu.indexOf("종료")>-1){
     menu = "종료";
@@ -126,8 +130,8 @@ async function main(){
 
       case '카카오' : console.log(menu); await sendKakaoMessage(); buttonPress = 0; break;
 
+      case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       
-
       case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
 
       case '종료' : console.log(menu); await ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
