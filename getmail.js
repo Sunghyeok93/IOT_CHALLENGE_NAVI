@@ -5,6 +5,15 @@ function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 const { URL } = require('url');
 const request = require('./request');
 
+const execPromise = str => {
+  return new Promise ((resolve, reject) => {
+    exec(str, (err, stdout, stderr) => {
+      if(err) reject (err);
+      else resolve(stdout);
+  })
+  })
+};
+
 
 async function ttsCommand(msg) {
     var commandLine = 'python3.6 /root/tts.py ' + msg;
@@ -22,13 +31,11 @@ async function ttsCommand(msg) {
 
 module.exports = {
     getMailModule : async function(){
-
-        const MAIL_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/voicemail';
+        const MAIL_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/voicemail';
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
-        url: mailUrl.toString(),
-          method: 'GET',
-          headers
+          url: mailUrl.toString(),
+          method: 'GET'
         };
         const mailResult = await request(mailOptions);
         console.log(mailResult);
@@ -38,4 +45,3 @@ module.exports = {
   };
 
 
-  

@@ -29,7 +29,7 @@ function menuCheck(menu){
   }else if(menu.indexOf("종료")>-1){menu = "종료";
   }else if(menu.indexOf("메시지")>-1){menu = "메시지 보내기";
   }else if(menu.indexOf("사서함")>-1){menu = "사서함 읽기";
-  }else{menu = "없음";}
+  }else{console.log(menu); menu = "없음";}
   return menu;
 }
 
@@ -141,9 +141,9 @@ async function main(){
 
 // 추가해야할 부분
 
-      case '메시지 보내기' : console.log(menu); await checkmail.getMailModule; break;
+      case '사서함 읽기' : console.log(menu); await checkmail.getMailModule(); console.log("끝"); break;
 
-      case '사서함 읽기' : console.log(menu); await sendmail.sendMailModule; break;
+      case '메시지 보내기' : console.log(menu); await sendmail.sendMailModule(); console.log("끝");break;
 
       case '종료' : console.log(menu); await ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
 
@@ -154,3 +154,4 @@ async function main(){
 
 
 }
+
