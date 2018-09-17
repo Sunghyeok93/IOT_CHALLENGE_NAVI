@@ -141,9 +141,9 @@ async function main(){
 
 // 추가해야할 부분
 
-      case '메시지 보내기' : console.log(menu); break;
+      case '메시지 보내기' : console.log(menu); await checkmail.getMailModule; break;
 
-      case '사서함 읽기' : console.log(menu); break;
+      case '사서함 읽기' : console.log(menu); await sendmail.sendMailModule; break;
 
       case '종료' : console.log(menu); await ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
 
