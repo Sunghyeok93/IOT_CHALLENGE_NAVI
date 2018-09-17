@@ -21,7 +21,7 @@ async function ttsCommand(msg) {
 
 
 module.exports = {
-    camModule : async function(){
+    sendMailModule : async function(){
         await ttsCommand("보내실 메시지를 말씀하세요.");
         mail = await sttCommand('2');
         console.log(mail);
