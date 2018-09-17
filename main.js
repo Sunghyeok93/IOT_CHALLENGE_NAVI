@@ -21,33 +21,15 @@ const execPromise = str => {
 };
 
 function menuCheck(menu){
-  if(menu.indexOf("길 찾")>-1){
-     menu= "길 찾기";
-     return menu;
-  }
-  if(menu.indexOf("분석")>-1){
-    menu= "사진 분석";
-    return menu;
-  }
-  if(menu.indexOf("저장")>-1){
-    menu= "사진첩 저장";
-    return menu;
-  }
-  if(menu.indexOf("긴급")>-1){
-    menu= "카카오";
-    return menu;
-}
-  if(menu.indexOf("물건")>-1){
-    menu= "물건 찾기";
-    return menu;
-}
-  if(menu.indexOf("종료")>-1){
-    menu = "종료";
-    return menu;
-}
-  if(menu.indexOf("메시지")>-1){menu = "보내기"; return menu;}
-  if(menu.indexOf("사서함")>-1){menu = "사서함"; return menu}
-  menu = "없음";
+  if(menu.indexOf("길 찾")>-1){menu= "길 찾기";
+  }else if(menu.indexOf("인식")>-1){menu= "물체 인식";
+  }else if(menu.indexOf("저장")>-1){menu= "사진첩 저장";
+  }else if(menu.indexOf("긴급")>-1){menu= "카카오";
+  }else if(menu.indexOf("물건")>-1){menu= "물건 찾기";
+  }else if(menu.indexOf("종료")>-1){menu = "종료";
+  }else if(menu.indexOf("메시지")>-1){menu = "메시지 보내기";
+  }else if(menu.indexOf("사서함")>-1){menu = "사서함 읽기";
+  }else{menu = "없음";}
   return menu;
 }
 
@@ -149,13 +131,19 @@ async function main(){
     switch(menu){
       case '길 찾기' : console.log(menu); await navi.naviModule(); break;
 
-      case '사진 분석' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
+      case '물체 인식' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
 
       case '사진첩 저장' : console.log(menu); await cam.photoBookModule(); buttonPress = 0; break;
 
       case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       
       case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
+
+// 추가해야할 부분
+
+      case '메시지 보내기' : console.log(menu); break;
+
+      case '사서함 읽기' : console.log(menu); break;
 
       case '종료' : console.log(menu); await ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
 
