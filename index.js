@@ -33,13 +33,13 @@ async function soundCommand(filename){
 
 module.exports = {
   naviModule : async function(){
-
-    //while(1){
+    let isError = true;
+    while(isError){
+    try{
     await soundCommand("destination.mp3");
     searchKeyword = await sttCommand('2');
     console.log(searchKeyword);
-    //}  
-
+      
     require('dotenv').config();
     const fs = require('fs');
     const { URL } = require('url');
@@ -53,7 +53,12 @@ module.exports = {
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=UTF-8',
       'User-Agent': 'Super Agent/0.0.1'
-    };
+    }; 
+    isError = false;
+    } catch(error){
+      console.log(error.message);
+    }
+    }
     // gps value reader  서버와 Http 통신
     async function gpsReader(){
       
