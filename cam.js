@@ -57,12 +57,19 @@ module.exports = {
 
   photoBookModule :async function(){
       await captureImage('/root/photobook');
-      await fileSend(
-        'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/photobook',
-        'abc',
-        '/root/image.jpg',
-        'image.jpg'
-       )
+      try{
+        await fileSend(
+          'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/photobook',
+          'abc',
+          '/root/image.jpg',
+          'image.jpg'
+         )
+        await ttsCommand("사진첩에 업로드되었습니다.");
+      } catch(error){
+        print(error.message);
+        await ttsCommand("사진첩 업로드를 실패하였습니다.");
+      }
+
     },
 
   objectCamModule : async function(){

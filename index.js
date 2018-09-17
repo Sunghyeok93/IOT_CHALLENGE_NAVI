@@ -34,11 +34,11 @@ async function soundCommand(filename){
 module.exports = {
   naviModule : async function(){
 
-    while(1){
+    //while(1){
     await soundCommand("destination.mp3");
     searchKeyword = await sttCommand('2');
     console.log(searchKeyword);
-    }  
+    //}  
 
     require('dotenv').config();
     const fs = require('fs');
