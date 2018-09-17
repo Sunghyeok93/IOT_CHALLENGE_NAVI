@@ -151,7 +151,7 @@ async function main(){
 
       case '사진 분석' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
 
-      case '사진첩 저장' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
+      case '사진첩 저장' : console.log(menu); await cam.photoBookModule(); buttonPress = 0; break;
 
       case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       
