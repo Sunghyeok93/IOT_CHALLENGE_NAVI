@@ -33,13 +33,17 @@ async function soundCommand(filename){
 
 module.exports = {
   naviModule : async function(){
-    let isError = true;
-    while(isError){
-    try{
     await soundCommand("destination.mp3");
     searchKeyword = await sttCommand('2');
     console.log(searchKeyword);
-      
+    searchKeyword = searchKeyword.replace('\n', '');
+    await ttsCommand(searchKeyword + " 맞습니까?");
+    destinationCheck = await sttCommand('2');
+    console.log(destinationCheck);
+    if(destinationCheck.indexOf("아니오")>-1){
+      return; ///거절 시 프로그램 종료
+    }else if(destinationCheck.indexOf("아니요")>-1){return;}
+    
     require('dotenv').config();
     const fs = require('fs');
     const { URL } = require('url');
@@ -54,11 +58,6 @@ module.exports = {
       'Content-Type': 'application/json; charset=UTF-8',
       'User-Agent': 'Super Agent/0.0.1'
     }; 
-    isError = false;
-    } catch(error){
-      console.log(error.message);
-    }
-    }
     // gps value reader  서버와 Http 통신
     async function gpsReader(){
       
@@ -174,7 +173,7 @@ module.exports = {
       const totalTime = naviProperties['totalTime'];
       console.log('경로 정보 수신 완료 : ' + totalDistance + '(m), ' + totalTime + '초 소요 예정');
       // console.log(naviResult);
-
+/*
       searchKeyword = searchKeyword.replace('\n', '');
       await ttsCommand(searchKeyword + " 맞습니까?");
       destinationCheck = await sttCommand('2');
@@ -183,7 +182,7 @@ module.exports = {
         return; ///거절 시 프로그램 종료
       }
       if(destinationCheck.indexOf("아니요")>-1){return;}
-
+*/
       // 목적지까지의 포인트
       const featureNum = Object.keys(naviJsonObj['features']).length;
       var pointArray = new Array(featureNum);

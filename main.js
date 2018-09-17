@@ -136,7 +136,7 @@ async function main(){
 
       case '물건 찾기' : console.log(menu); cam.objectCamModule(); buttonPress = 0; break;
       
-      case '없음' : console.log(menu); ttsCommand("잘못된 명령입니다."); main(); break;
+      case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
 
 // 추가해야할 부분
 
