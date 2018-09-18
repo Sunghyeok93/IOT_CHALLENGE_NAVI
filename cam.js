@@ -82,8 +82,6 @@ module.exports = {
     },
 
   objectCamModule : async function(){
-    let searchKeyword = "";
-    isError = false;
     await ttsCommand("찾으려는 물건을 말씀하세요.");
     searchKeyword = await sttCommand('2');
     console.log(searchKeyword);
