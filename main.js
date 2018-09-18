@@ -123,8 +123,8 @@ async function main(){
    try{
  //1. 메뉴 보기
 //  ------------카카오 AccessToken 활성화 코드 -----------
-//    debug = await kakao.accessModule();
-//    console.log(debug);
+    var refreshKakao = await kakao.accessModule();
+    fs.writeFileSync(tokenFile, refreshKakao, 'utf8');
 //----------------------------------------------------------
     await soundCommand("start.mp3");
     menu = await sttCommand('2');
