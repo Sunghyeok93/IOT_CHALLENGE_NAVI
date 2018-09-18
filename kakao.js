@@ -10,6 +10,9 @@ const KAKAO_REFRESH_URL = 'https://kauth.kakao.com/oauth/token';
 const oauthUrl = new URL(KAKAO_OAUTH_URL);
 const sendUrl = new URL(KAKAO_SEND_URL);
 const refreshUrl = new URL(KAKAO_REFRESH_URL);
+const kakaoCode = 'qA4nM0Wc3pvtExe955PsERxLMeDmAC0GMyu7deGuUQb0elO9fFkxj-gXkhMD8us-o_2sQgo8BhkAAAFl7JeaRQ';  // kakao 코드 수정해줘야 할 때 이곳 수정만 하면 됨
+
+
 // 한달에 한번 브라우저에서 유저 초기화 해줘서 아래 accessModule()의 code에 값 넣어줄 것.
 // 사용자 동의 : https://kauth.kakao.com/oauth/authorize?client_id=ed09e5952335dc94545041c3a532e490&redirect_uri=http://localhost:5000/oauth&response_type=code
 
@@ -28,7 +31,7 @@ module.exports = {
           'grant_type' : 'authorization_code',
           'client_id' : 'ed09e5952335dc94545041c3a532e490',
           'redirect_uri' : 'http://localhost:5000/oauth',
-          'code' : 'Pis4QpAoANsZjOv5JVJkRQIGXPUKkojRycP0dUNyTFUUJK75Q2t3S25HI4DBS8q0FUP42Ao8BkMAAAFluRf6Dg' // user_token 값 넣을것
+          'code' : 'qA4nM0Wc3pvtExe955PsERxLMeDmAC0GMyu7deGuUQb0elO9fFkxj-gXkhMD8us-o_2sQgo8BhkAAAFl7JeaRQ' //kakaoCode // user_token 값 넣을것
         }
       };
 

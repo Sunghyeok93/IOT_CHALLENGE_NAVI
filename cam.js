@@ -1,6 +1,7 @@
 var NodeWebcam = require('node-webcam')
 const fs = require('fs');
 const request = require('request');
+const { URL } = require('url');
 
 var sys = require('sys');
 var exec = require('child_process').exec;
@@ -12,6 +13,14 @@ async function ttsCommand(msg) {
   var commandLine = 'python3.6 /root/tts.py ' + msg;
   await execPromise(commandLine);
 }
+  async function sttCommand(second) {
+    var ttsCmd = "python3 /root/python-docs-samples/speech/cloud-client/quickstart.py";
+    var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
+    await execPromise(recordCmd);
+    const stdout = await execPromise(ttsCmd);
+    return stdout;
+  }
+
 
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -75,27 +84,26 @@ module.exports = {
   objectCamModule : async function(){
     await ttsCommand("찾으려는 물건을 말씀하세요.");
     searchKeyword = await sttCommand('2');
-    const FIND_URL = 'ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject';
+    const FIND_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject';
     const findObjectUrl = new URL(FIND_URL);
     const findOptions = {
       url: findObjectUrl.toString(),
       method: "GET",
-      headers,
-      body: {
-        object: searchKeyword.toString()
-      }
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      form: {'object' : searchKeyword}
     };
-
+    const objectNameResult = await request(findOptions);
 
     while(1){
       await captureImage('/root/imgae');
-  
       result = await fileSend(
         'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject',
         'abc',
         '/root/image.jpg',
         'image.jpg'
        )
+       console.log("filesend");
+       console.log(result);
        if(result==0){
         continue;
        }else{

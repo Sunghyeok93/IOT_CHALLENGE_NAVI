@@ -120,33 +120,44 @@ buttonBlack.watch(async function (eroor, value){
 video.videoModule();
 
 async function main(){
-   
+   try{
  //1. 메뉴 보기
-   await soundCommand("start.mp3");
+//  ------------카카오 AccessToken 활성화 코드 -----------
+//    debug = await kakao.accessModule();
+//    console.log(debug);
+//----------------------------------------------------------
+    await soundCommand("start.mp3");
     menu = await sttCommand('2');
     console.log(menu);
     menu = menuCheck(menu);
     //2. 사용자 메뉴 선택 받아들이기.
     switch(menu){
-      case '길 찾기' : console.log(menu); navi.naviModule(); break;
+      case '길 찾기' : console.log(menu); await navi.naviModule(); break;
 
-      case '물체 인식' : console.log(menu); cam.camModule(); buttonPress = 0; break;
+      case '물체 인식' : console.log(menu); await cam.camModule(); buttonPress = 0; break;
 
-      case '사진첩 저장' : console.log(menu); cam.photoBookModule(); buttonPress = 0; break;
+      case '사진첩 저장' : console.log(menu); await cam.photoBookModule(); buttonPress = 0; break;
 
-      case '물건 찾기' : console.log(menu); cam.objectCamModule(); buttonPress = 0; break;
+      case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       
       case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
 
 // 추가해야할 부분
 
-      case '사서함 읽기' : console.log(menu); checkmail.getMailModule(); console.log("끝"); break;
+      case '사서함 읽기' : console.log(menu); await checkmail.getMailModule(); console.log("끝");buttonPress = 0; break;
 
-      case '메시지 보내기' : console.log(menu); sendmail.sendMailModule(); console.log("끝");break;
+      case '메시지 보내기' : console.log(menu); await sendmail.sendMailModule(); console.log("끝"); buttonPress = 0;  break;
 
       case '종료' : console.log(menu); ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
 
     }
+}catch(e){
+console.log(e);
+ await soundCommand("error.mp3");
+ main();
+
+}
+
 
 }
 
