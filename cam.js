@@ -82,9 +82,7 @@ module.exports = {
     },
 
   objectCamModule : async function(){
-    let isError = false;
     let searchKeyword = "";
-    while(!isError){
     isError = false;
     await ttsCommand("찾으려는 물건을 말씀하세요.");
     searchKeyword = await sttCommand('2');
@@ -94,8 +92,7 @@ module.exports = {
     destinationCheck = await sttCommand('2');
     console.log(destinationCheck);
     if(destinationCheck.indexOf("아니오")>-1||destinationCheck.indexOf("아니요")>-1){
-      isError = true; ///거절 시 프로그램 종료
-    }
+      return; ///거절 시 프로그램 종료
     }
     console.log("searchKeyword : " + searchKeyword);
     const FIND_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject';
