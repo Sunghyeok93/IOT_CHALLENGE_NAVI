@@ -123,9 +123,9 @@ async function main(){
    try{
  //1. 메뉴 보기
 //  ------------카카오 AccessToken 활성화 코드 -----------
-    var refreshKakao = await kakao.accessModule();
-    var tokenJson = JSON.stringify(refreshKakao);
-    fs.writeFileSync(tokenFile, tokenJson, 'utf8');
+//    var refreshKakao = await kakao.accessModule();
+//    var tokenJson = JSON.stringify(refreshKakao);
+//    fs.writeFileSync(tokenFile, tokenJson, 'utf8');
 //----------------------------------------------------------
     await soundCommand("start.mp3");
     menu = await sttCommand('2');
