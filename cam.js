@@ -111,7 +111,7 @@ module.exports = {
         'abc',
         '/root/dog.jpg',
         'dog.jpg'
-     //   'image.jpg'
+     //   'image.jpg'로 수정해줘야함
        )
        console.log("filesend");
        console.log(result);
