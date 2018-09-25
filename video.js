@@ -2,6 +2,9 @@ var NodeWebcam = require('node-webcam')
 const fs = require('fs');
 const request = require('request');
 
+const {baseURL} = require('./baseURL');
+const path = require('path');
+
 var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
@@ -47,7 +50,7 @@ module.exports = {
     await captureImage('/root/video');
 
     result = await fileSend(
-      'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/videostream',
+      path.join(baseURL, '/videostream'),
       'abc',
       '/root/video.jpg',
       'video.jpg'

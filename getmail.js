@@ -5,6 +5,9 @@ function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 const { URL } = require('url');
 const request = require('./request');
 
+const {baseURL} = require('./baseURL');
+const path = require('path');
+
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
     exec(str, (err, stdout, stderr) => {
@@ -31,7 +34,7 @@ async function ttsCommand(msg) {
 
 module.exports = {
     getMailModule : async function(){
-        const MAIL_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/voicemail';
+        const MAIL_URL = path.join(baseURL, "/voicemail");
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
           url: mailUrl.toString(),

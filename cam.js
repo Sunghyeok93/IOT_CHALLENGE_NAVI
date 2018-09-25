@@ -3,6 +3,9 @@ const fs = require('fs');
 const request = require('request');
 const { URL } = require('url');
 
+const {baseURL} = require('./baseURL');
+const path = require('path');
+
 var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
@@ -69,7 +72,7 @@ module.exports = {
     await captureImage('/root/image');
 
     result = await fileSend(
-      'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/image',
+      path.join(baseURL, '/image'),
       'abc',
       '/root/image.jpg',
       'image.jpg'
@@ -82,7 +85,7 @@ module.exports = {
       await captureImage('/root/photobook');
       try{
         await fileSend(
-          'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/photobook',
+          path.join(baseURL, '/photobook'),
           'abc',
           '/root/image.jpg',
           'image.jpg'
@@ -107,7 +110,7 @@ module.exports = {
       return; ///거절 시 프로그램 종료
     }
     console.log("searchKeyword : " + searchKeyword);
-    const FIND_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject';
+    const FIND_URL = path.join(baseURL, '/findobject' );
     const findObjectUrl = new URL(FIND_URL);
     const findOptions = {
       url: findObjectUrl.toString(),
@@ -121,7 +124,7 @@ module.exports = {
       await captureImage('/root/imgae');
       console.log("fileSend 전");
       result = await fileSend(
-        'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject',
+        path.join(baseURL, '/findobject' ),
         'abc',
         '/root/image.jpg',
         'image.jpg'

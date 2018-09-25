@@ -6,6 +6,9 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
+const {baseURL} = require('./baseURL');
+const path = require('path');
+
 var Webcam = NodeWebcam.create();
 
 async function ttsCommand(msg) {
@@ -46,7 +49,7 @@ module.exports = {
     await captureImage('/root/image2');
 
     result = await fileSend(
-      'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/photobook',
+      path.join(baseURL, '/photobook'),
       'abc',
       '/root/image2.jpg',
       'image2.jpg'

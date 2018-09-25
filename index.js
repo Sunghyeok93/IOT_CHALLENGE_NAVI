@@ -2,6 +2,9 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
+const {baseURL} = require('./baseURL');
+const path = require('path');
+
 // stt, tts
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -63,7 +66,7 @@ module.exports = {
       
 // const fileName = "/root/gps.txt";
       // const contents = fs.readFileSync(fileName,신 'utf8');
-      const GPS_URL = 'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/gpsartik';
+      const GPS_URL = path.join(baseURL, '/gpsartik');
       const gpsUrl = new URL(GPS_URL);
       const gpsOptions = {
         url: gpsUrl.toString(),
