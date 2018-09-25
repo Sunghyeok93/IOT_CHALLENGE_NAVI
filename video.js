@@ -3,7 +3,8 @@ const fs = require('fs');
 const request = require('request');
 
 const {baseURL} = require('./baseURL');
-const path = require('path');
+const url = require('url');
+const { URL } = url;
 
 var sys = require('sys');
 var exec = require('child_process').exec;
@@ -50,7 +51,7 @@ module.exports = {
     await captureImage('/root/video');
 
     result = await fileSend(
-      path.join(baseURL, '/videostream'),
+      url.resolve(baseURL, '/videostream'),
       'abc',
       '/root/video.jpg',
       'video.jpg'

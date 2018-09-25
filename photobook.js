@@ -7,7 +7,8 @@ var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
 const {baseURL} = require('./baseURL');
-const path = require('path');
+const url = require('url');
+const { URL } = url;
 
 var Webcam = NodeWebcam.create();
 
@@ -49,7 +50,7 @@ module.exports = {
     await captureImage('/root/image2');
 
     result = await fileSend(
-      path.join(baseURL, '/photobook'),
+      url.resolve(baseURL, '/photobook'),
       'abc',
       '/root/image2.jpg',
       'image2.jpg'

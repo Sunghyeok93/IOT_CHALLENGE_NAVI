@@ -3,7 +3,8 @@ var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
 const {baseURL} = require('./baseURL');
-const path = require('path');
+const url = require('url');
+const { URL } = url;
 
 // stt, tts
 const execPromise = str => {
@@ -49,7 +50,6 @@ module.exports = {
     
     require('dotenv').config();
     const fs = require('fs');
-    const { URL } = require('url');
     const { TMAP_API_KEY } = process.env;
     const request = require('./request');
     const POI_URL = 'https://api2.sktelecom.com/tmap/pois';
@@ -66,7 +66,7 @@ module.exports = {
       
 // const fileName = "/root/gps.txt";
       // const contents = fs.readFileSync(fileName,신 'utf8');
-      const GPS_URL = path.join(baseURL, '/gpsartik');
+      const GPS_URL = url.resolve(baseURL, '/gpsartik');
       const gpsUrl = new URL(GPS_URL);
       const gpsOptions = {
         url: gpsUrl.toString(),

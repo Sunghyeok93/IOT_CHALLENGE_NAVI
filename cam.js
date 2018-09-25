@@ -1,10 +1,10 @@
 var NodeWebcam = require('node-webcam')
 const fs = require('fs');
 const request = require('request');
-const { URL } = require('url');
+const url = require('url');
+const { URL } = url;
 
 const {baseURL} = require('./baseURL');
-const path = require('path');
 
 var sys = require('sys');
 var exec = require('child_process').exec;
@@ -72,7 +72,7 @@ module.exports = {
     await captureImage('/root/image');
 
     result = await fileSend(
-      path.join(baseURL, '/image'),
+      url.resolve(baseURL, '/image'),
       'abc',
       '/root/image.jpg',
       'image.jpg'
@@ -85,7 +85,7 @@ module.exports = {
       await captureImage('/root/photobook');
       try{
         await fileSend(
-          path.join(baseURL, '/photobook'),
+          url.resolve(baseURL, '/photobook'),
           'abc',
           '/root/image.jpg',
           'image.jpg'
@@ -110,7 +110,7 @@ module.exports = {
       return; ///거절 시 프로그램 종료
     }
     console.log("searchKeyword : " + searchKeyword);
-    const FIND_URL = path.join(baseURL, '/findobject' );
+    const FIND_URL = url.resolve(baseURL, '/findobject' );
     const findObjectUrl = new URL(FIND_URL);
     const findOptions = {
       url: findObjectUrl.toString(),
@@ -124,7 +124,7 @@ module.exports = {
       await captureImage('/root/imgae');
       console.log("fileSend 전");
       result = await fileSend(
-        path.join(baseURL, '/findobject' ),
+        url.resolve(baseURL, '/findobject' ),
         'abc',
         '/root/image.jpg',
         'image.jpg'

@@ -3,9 +3,10 @@ var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
 const {baseURL} = require('./baseURL');
-const path = require('path');
 
-const { URL } = require('url');
+const url = require('url');
+const { URL } = url;
+
 const request = require('./request');
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -34,7 +35,7 @@ module.exports = {
     sendMailModule : async function(){
         await ttsCommand("보내실 메시지를 말씀하세요.");
         mail = await sttCommand('4'); // 메시지 전송 시간 수정 요망됨
-        const MAIL_URL = path.join(baseURL, '/voicemail');
+        const MAIL_URL = url.resolve(baseURL, '/voicemail');
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
           url: mailUrl.toString(),

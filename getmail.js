@@ -2,11 +2,11 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
-const { URL } = require('url');
+const url = require('url');
+const { URL } = url;
 const request = require('./request');
 
 const {baseURL} = require('./baseURL');
-const path = require('path');
 
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -34,7 +34,7 @@ async function ttsCommand(msg) {
 
 module.exports = {
     getMailModule : async function(){
-        const MAIL_URL = path.join(baseURL, "/voicemail");
+        const MAIL_URL = url.resolve(baseURL, "/voicemail");
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
           url: mailUrl.toString(),
