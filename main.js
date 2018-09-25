@@ -66,7 +66,7 @@ function sleep(ms){
 }
 
 async function ttsCommand(msg) {
-  var commandLine = 'python3.6 /root/tts.py ' + msg;
+  var commandLine = 'python3 /root/tts.py ' + msg;
   await execPromise(commandLine);
 }
 

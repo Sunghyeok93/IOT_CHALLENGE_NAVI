@@ -9,7 +9,7 @@ function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 var Webcam = NodeWebcam.create();
 
 async function ttsCommand(msg) {
-  var commandLine = 'python3.6 /root/tts.py ' + msg;
+  var commandLine = 'python3 /root/tts.py ' + msg;
   await execPromise(commandLine);
 }
 

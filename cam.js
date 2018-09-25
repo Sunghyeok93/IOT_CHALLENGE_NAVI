@@ -7,10 +7,24 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
-var Webcam = NodeWebcam.create();
+ 
+var opts = {
+    width: 800,
+    height: 600,
+    quality: 100,
+
+    delay: 0,
+    saveShots: true,
+    output: "jpeg",
+    device: false,
+    callbackReturn: "location",
+    verbose: false
+};
+
+var Webcam = NodeWebcam.create(opts);
 
 async function ttsCommand(msg) {
-  var commandLine = 'python3.6 /root/tts.py ' + msg;
+  var commandLine = 'python3 /root/tts.py ' + msg;
   await execPromise(commandLine);
 }
   async function sttCommand(second) {
@@ -109,9 +123,9 @@ module.exports = {
       result = await fileSend(
         'http://ec2-54-180-8-155.ap-northeast-2.compute.amazonaws.com:5000/findobject',
         'abc',
-        '/root/dog.jpg',
-        'dog.jpg'
-     //   'image.jpg'로 수정해줘야함
+        '/root/image.jpg',
+        'image.jpg'
+     //   'image.jpg' : 실행 코드, 'dog.jpg' : 예제 파일
        )
        console.log("filesend");
        console.log(result);
