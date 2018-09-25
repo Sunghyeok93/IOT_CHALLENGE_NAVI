@@ -39,6 +39,7 @@ async function sendKakaoMessage(){
   var accessToken = tokenJson['access_token'];
   var refreshToken = tokenJson['refresh_token'];
   if(await kakao.sendModule(accessToken)){
+    await soundCommand("yellow.mp3")
     console.log('카카오톡 메시지를 전송하였습니다.');
     return;
   }
@@ -111,10 +112,16 @@ buttonYellow.watch(async function (error, value){
   }
 })
 
+blackPress = 0;
 var buttonBlack = new Gpio(41, 'in','both')
 buttonBlack.watch(async function (eroor, value){
-  console.log('black');
-  process.exit(1);
+  if(blackPress === 0 ){
+    blackPress = 1;
+    console.log('black');
+    await soundCommand("blackbtn.mp3")
+    process.exit(1);
+    blackPress =0;
+  }
 })
 
 video.videoModule();
