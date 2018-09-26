@@ -29,11 +29,14 @@ async function ttsCommand(msg) {
     const stdout = await execPromise(ttsCmd);
     return stdout;
   }
-
+async function soundCommand(filename){
+  var commandLine = 'mpg321 ~/sound/'+filename;
+  await execPromise(commandLine);
+}
 
 module.exports = {
     sendMailModule : async function(){
-        await ttsCommand("보내실 메시지를 말씀하세요.");
+        await soundCommand("inputMessage.mp3");
         mail = await sttCommand('4'); // 메시지 전송 시간 수정 요망됨
         const MAIL_URL = url.resolve(baseURL, '/voicemail');
         const mailUrl = new URL(MAIL_URL);
@@ -46,10 +49,10 @@ module.exports = {
         const mailResult = await request(mailOptions);
         console.log(mailResult);
         if(mailResult == 200){
-            await ttsCommand("메시지가 정상 전달 되었습니다.");
+            await soundCommand("messageSuccess.mp3");
         }
         else{
-            await ttsCommand("메시지 전송 실패.");
+            await soundCommand("messageFail.mp3");
         }     
     }
   };

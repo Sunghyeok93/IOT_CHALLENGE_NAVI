@@ -37,7 +37,10 @@ async function ttsCommand(msg) {
     const stdout = await execPromise(ttsCmd);
     return stdout;
   }
-
+async function soundCommand(filename){
+  var commandLine = 'mpg321 ~/sound/'+filename;
+  await execPromise(commandLine);
+}
 
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -90,16 +93,16 @@ module.exports = {
           '/root/image.jpg',
           'image.jpg'
          )
-        await ttsCommand("사진첩에 업로드되었습니다.");
+        await soundCommand("photoSuccess.mp3");
       } catch(error){
         print(error.message);
-        await ttsCommand("사진첩 업로드를 실패하였습니다.");
+        await soundCommand("photofail.mp3");
       }
 
     },
 
   objectCamModule : async function(){
-    await ttsCommand("찾으려는 물건을 말씀하세요.");
+    await soundCommand("sayObject.mp3");
     searchKeyword = await sttCommand('2');
     console.log(searchKeyword);
     searchKeyword = searchKeyword.replace('\n', '');

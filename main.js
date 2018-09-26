@@ -102,7 +102,7 @@ buttonGreen.watch(async function (error, value) {
   }
 })
 yellowPress = 0;
-var buttonYellow = new Gpio(25, 'in','both')
+var buttonYellow = new Gpio(46, 'in','both')
 buttonYellow.watch(async function (error, value){
   if(yellowPress===0){
     console.log('yellow');
@@ -113,7 +113,7 @@ buttonYellow.watch(async function (error, value){
 })
 
 blackPress = 0;
-var buttonBlack = new Gpio(41, 'in','both')
+var buttonBlack = new Gpio(14, 'in','both')
 buttonBlack.watch(async function (eroor, value){
   if(blackPress === 0 ){
     blackPress = 1;
@@ -148,7 +148,7 @@ async function main(){
 
       case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       
-      case '없음' : console.log(menu); await ttsCommand("잘못된 명령입니다."); main(); break;
+      case '없음' : console.log(menu); await soundCommand("noCommand.mp3"); main(); break;
 
 // 추가해야할 부분
 
@@ -156,7 +156,7 @@ async function main(){
 
       case '메시지 보내기' : console.log(menu); await sendmail.sendMailModule(); console.log("끝"); buttonPress = 0;  break;
 
-      case '종료' : console.log(menu); ttsCommand("프로그램을 종료합니다."); buttonPress = 0; break;
+      case '종료' : console.log(menu); await soundCommand("blackbtn.mp3"); buttonPress = 0; break;
 
     }
 }catch(e){

@@ -17,6 +17,11 @@ const execPromise = str => {
   })
 };
 
+async function soundCommand(filename){
+  var commandLine = 'mpg321 ~/sound/'+filename;
+  await execPromise(commandLine);
+}
+
 
 async function ttsCommand(msg) {
     var commandLine = 'python3 /root/tts.py ' + msg;
@@ -40,10 +45,32 @@ module.exports = {
           url: mailUrl.toString(),
           method: 'GET'
         };
+	while(1){
         const mailResult = await request(mailOptions);
         console.log(mailResult);
         
-        await ttsCommand(mailResult);
+	var count = mailResult.substring(0,1);
+	
+        	await ttsCommand(mailResult);
+		if(count==="1"||count==="읽"){
+			await soundCommand("endOfGetmail.mp3");
+			break;
+		}
+		else{
+			await soundCommand("askMoreResult.mp3");	
+			answer = await sttCommand('1');
+		        console.log(answer);
+   			if(answer.indexOf("예")>-1){
+     			   	   ///거절 시 프로그램 종료
+   			}else if(answer.indexOf("네")>-1){}
+			else{
+				await soundCommand("endOfGetmail.mp3");
+				break;
+			}
+
+		}
+
+	}
     }
   };
 
