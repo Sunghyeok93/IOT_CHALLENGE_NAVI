@@ -1,3 +1,5 @@
+var exec = require('child_process').exec;
+
 const execPromise = str => {
     return new Promise ((resolve, reject) => {
       exec(str, (err, stdout, stderr) => {

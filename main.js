@@ -5,9 +5,7 @@ cam = require('./cam');
 sendmail = require('./voicemail');
 checkmail = require('./getmail');
 var sys = require('sys');
-var exec = require('child_process').exec;
 var buttonPress;
-function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 kakao = require('./kakao');
 const tokenFile = '/root/IOT_CHALLENGE_NAVI/token.txt'
 var fs = require('fs');
