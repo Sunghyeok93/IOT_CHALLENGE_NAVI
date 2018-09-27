@@ -1,3 +1,4 @@
+command = require('./command');
 video = require('./video');
 navi = require('./index');
 cam = require('./cam');
@@ -134,7 +135,7 @@ async function main(){
 //    var tokenJson = JSON.stringify(refreshKakao);
 //    fs.writeFileSync(tokenFile, tokenJson, 'utf8');
 //----------------------------------------------------------
-    await soundCommand("start.mp3");
+    await command.soundCommand("start.mp3");
     menu = await sttCommand('2');
     console.log(menu);
     menu = menuCheck(menu);
