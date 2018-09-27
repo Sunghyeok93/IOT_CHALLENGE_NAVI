@@ -1,3 +1,4 @@
+command = require('./command');
 var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
@@ -8,6 +9,7 @@ const url = require('url');
 const { URL } = url;
 
 const request = require('./request');
+/*
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
     exec(str, (err, stdout, stderr) => {
@@ -33,11 +35,11 @@ async function soundCommand(filename){
   var commandLine = 'mpg321 ~/sound/'+filename;
   await execPromise(commandLine);
 }
-
+*/
 module.exports = {
     sendMailModule : async function(){
-        await soundCommand("inputMessage.mp3");
-        mail = await sttCommand('4'); // 메시지 전송 시간 수정 요망됨
+        await command.soundCommand("inputMessage.mp3");
+        mail = await command.sttCommand('4'); // 메시지 전송 시간 수정 요망됨
         const MAIL_URL = url.resolve(baseURL, '/voicemail');
         const mailUrl = new URL(MAIL_URL);
         const mailOptions = {
@@ -49,10 +51,10 @@ module.exports = {
         const mailResult = await request(mailOptions);
         console.log(mailResult);
         if(mailResult == 200){
-            await soundCommand("messageSuccess.mp3");
+            await command.soundCommand("messageSuccess.mp3");
         }
         else{
-            await soundCommand("messageFail.mp3");
+            await command.soundCommand("messageFail.mp3");
         }     
     }
   };

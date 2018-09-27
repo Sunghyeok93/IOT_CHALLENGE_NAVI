@@ -1,3 +1,4 @@
+command = require('./command');
 var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
@@ -5,7 +6,7 @@ function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 const {baseURL} = require('./baseURL');
 const url = require('url');
 const { URL } = url;
-
+/*
 // stt, tts
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
@@ -32,17 +33,17 @@ async function soundCommand(filename){
   await execPromise(commandLine);
 }
     
-
+*/
 
 
 module.exports = {
   naviModule : async function(){
-    await soundCommand("destination.mp3");
-    searchKeyword = await sttCommand('2');
+    await command.soundCommand("destination.mp3");
+    searchKeyword = await command.sttCommand('2');
     console.log(searchKeyword);
     searchKeyword = searchKeyword.replace('\n', '');
-    await ttsCommand(searchKeyword + " 맞습니까?");
-    destinationCheck = await sttCommand('2');
+    await command.ttsCommand(searchKeyword + " 맞습니까?");
+    destinationCheck = await command.sttCommand('2');
     console.log(destinationCheck);
     if(destinationCheck.indexOf("아니오")>-1){
       return; ///거절 시 프로그램 종료
@@ -216,13 +217,13 @@ module.exports = {
       
         if(currentPoint === pointNum) {
           console.log('목적지에 도착했습니다.');
-          await ttsCommand("목적지에 도착했습니다.");
+          await command.ttsCommand("목적지에 도착했습니다.");
           break;
         }
         var dst = distance(currentLat, currentLon, naviJsonObj['features'][pointArray[currentPoint]]['geometry']['coordinates'][1], naviJsonObj['features'][pointArray[currentPoint]]['geometry']['coordinates'][0]);
         if(dst < 19.0){
           console.log(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
-          await ttsCommand(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
+          await command.ttsCommand(naviJsonObj['features'][pointArray[currentPoint]]['properties']['description']);
           currentPoint = currentPoint + 1;
         }
 	console.log('거리  : ',dst);

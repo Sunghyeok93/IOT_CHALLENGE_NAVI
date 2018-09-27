@@ -1,3 +1,4 @@
+command = require('./command');
 var NodeWebcam = require('node-webcam')
 const fs = require('fs');
 const request = require('request');
@@ -11,7 +12,7 @@ var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 
 var Webcam = NodeWebcam.create();
-
+/*
 async function ttsCommand(msg) {
   var commandLine = 'python3 /root/tts.py ' + msg;
   await execPromise(commandLine);
@@ -25,7 +26,7 @@ const execPromise = str => {
   })
   })
 };
-
+*/
 const captureImage = path => new Promise ((resolve, reject) => {
   Webcam.capture(path, (err, data) => {
       if (err) reject(err)

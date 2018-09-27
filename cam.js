@@ -1,3 +1,4 @@
+command = require('./command');
 var NodeWebcam = require('node-webcam')
 const fs = require('fs');
 const request = require('request');
@@ -25,7 +26,7 @@ var opts = {
 };
 
 var Webcam = NodeWebcam.create(opts);
-
+/*
 async function ttsCommand(msg) {
   var commandLine = 'python3 /root/tts.py ' + msg;
   await execPromise(commandLine);
@@ -50,7 +51,7 @@ const execPromise = str => {
   })
   })
 };
-
+*/
 const captureImage = path => new Promise ((resolve, reject) => {
   Webcam.capture(path, (err, data) => {
       if (err) reject(err)
@@ -81,7 +82,7 @@ module.exports = {
       'image.jpg'
      )
     
-     await ttsCommand(result);
+     await command.ttsCommand(result);
   },
 
   photoBookModule :async function(){
@@ -93,21 +94,21 @@ module.exports = {
           '/root/image.jpg',
           'image.jpg'
          )
-        await soundCommand("photoSuccess.mp3");
+        await command.soundCommand("photoSuccess.mp3");
       } catch(error){
         print(error.message);
-        await soundCommand("photofail.mp3");
+        await command.soundCommand("photofail.mp3");
       }
 
     },
 
   objectCamModule : async function(){
-    await soundCommand("sayObject.mp3");
-    searchKeyword = await sttCommand('2');
+    await command.soundCommand("sayObject.mp3");
+    searchKeyword = await command.sttCommand('2');
     console.log(searchKeyword);
     searchKeyword = searchKeyword.replace('\n', '');
-    await ttsCommand(searchKeyword + " 맞습니까?");
-    destinationCheck = await sttCommand('2');
+    await command.ttsCommand(searchKeyword + " 맞습니까?");
+    destinationCheck = await command.sttCommand('2');
     console.log(destinationCheck);
     if(destinationCheck.indexOf("아니오")>-1||destinationCheck.indexOf("아니요")>-1){
       return; ///거절 시 프로그램 종료
@@ -138,7 +139,7 @@ module.exports = {
        if(result==0){
         continue;
        }else{
-        await ttsCommand(result);
+        await command.ttsCommand(result);
         break;
        }
     }

@@ -11,7 +11,7 @@ function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
 kakao = require('./kakao');
 const tokenFile = '/root/IOT_CHALLENGE_NAVI/token.txt'
 var fs = require('fs');
-
+/*
 const execPromise = str => {
   return new Promise ((resolve, reject) => {
     exec(str, (err, stdout, stderr) => {
@@ -20,7 +20,7 @@ const execPromise = str => {
   })
   })
 };
-
+*/
 function menuCheck(menu){
   if(menu.indexOf("길 찾")>-1){menu= "길 찾기";
   }else if(menu.indexOf("인식")>-1){menu= "물체 인식";
@@ -40,7 +40,7 @@ async function sendKakaoMessage(){
   var accessToken = tokenJson['access_token'];
   var refreshToken = tokenJson['refresh_token'];
   if(await kakao.sendModule(accessToken)){
-    await soundCommand("yellow.mp3")
+    await command.soundCommand("yellow.mp3")
     console.log('카카오톡 메시지를 전송하였습니다.');
     return;
   }
@@ -66,7 +66,7 @@ function sleep(ms){
   var ts1 = new Date().getTime() + ms;
   do var ts2 = new Date().getTime(); while (ts2<ts1);
 }
-
+/*
 async function ttsCommand(msg) {
   var commandLine = 'python3 /root/tts.py ' + msg;
   await execPromise(commandLine);
@@ -84,7 +84,7 @@ async function soundCommand(filename){
   var commandLine = 'mpg321 ~/sound/'+filename;
   await execPromise(commandLine);
 }
-
+*/
 var Gpio = require('onoff').Gpio
 var buttonGreen = new Gpio(26, 'in', 'both')
 buttonPress = 0;
@@ -119,7 +119,7 @@ buttonBlack.watch(async function (eroor, value){
   if(blackPress === 0 ){
     blackPress = 1;
     console.log('black');
-    await soundCommand("blackbtn.mp3")
+    await command.soundCommand("blackbtn.mp3")
     process.exit(1);
     blackPress =0;
   }
@@ -136,7 +136,7 @@ async function main(){
 //    fs.writeFileSync(tokenFile, tokenJson, 'utf8');
 //----------------------------------------------------------
     await command.soundCommand("start.mp3");
-    menu = await sttCommand('2');
+    menu = await command.sttCommand('2');
     console.log(menu);
     menu = menuCheck(menu);
     //2. 사용자 메뉴 선택 받아들이기.
@@ -149,7 +149,7 @@ async function main(){
 
       case '물건 찾기' : console.log(menu); await cam.objectCamModule(); buttonPress = 0; break;
       
-      case '없음' : console.log(menu); await soundCommand("noCommand.mp3"); main(); break;
+      case '없음' : console.log(menu); await command.soundCommand("noCommand.mp3"); main(); break;
 
 // 추가해야할 부분
 
@@ -157,12 +157,12 @@ async function main(){
 
       case '메시지 보내기' : console.log(menu); await sendmail.sendMailModule(); console.log("끝"); buttonPress = 0;  break;
 
-      case '종료' : console.log(menu); await soundCommand("blackbtn.mp3"); buttonPress = 0; break;
+      case '종료' : console.log(menu); await command.soundCommand("blackbtn.mp3"); buttonPress = 0; break;
 
     }
 }catch(e){
 console.log(e);
- await soundCommand("error.mp3");
+ await command.soundCommand("error.mp3");
  main();
 
 }

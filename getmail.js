@@ -1,3 +1,4 @@
+command = require('./command');
 var sys = require('sys');
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
@@ -16,7 +17,7 @@ const execPromise = str => {
   })
   })
 };
-
+/*
 async function soundCommand(filename){
   var commandLine = 'mpg321 ~/sound/'+filename;
   await execPromise(commandLine);
@@ -36,7 +37,7 @@ async function ttsCommand(msg) {
     return stdout;
   }
 
-
+*/
 module.exports = {
     getMailModule : async function(){
         const MAIL_URL = url.resolve(baseURL, "/voicemail");
@@ -51,20 +52,20 @@ module.exports = {
         
 	var count = mailResult.substring(0,1);
 	
-        	await ttsCommand(mailResult);
+        	await command.ttsCommand(mailResult);
 		if(count==="1"||count==="읽"){
-			await soundCommand("endOfGetmail.mp3");
+			await command.soundCommand("endOfGetmail.mp3");
 			break;
 		}
 		else{
-			await soundCommand("askMoreResult.mp3");	
-			answer = await sttCommand('1');
+			await command.soundCommand("askMoreResult.mp3");	
+			answer = await command.sttCommand('1');
 		        console.log(answer);
    			if(answer.indexOf("예")>-1){
      			   	   ///거절 시 프로그램 종료
    			}else if(answer.indexOf("네")>-1){}
 			else{
-				await soundCommand("endOfGetmail.mp3");
+				await command.soundCommand("endOfGetmail.mp3");
 				break;
 			}
 
