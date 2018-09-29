@@ -1,40 +1,7 @@
 command = require('./command');
-var sys = require('sys');
-var exec = require('child_process').exec;
-function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
-
 const {baseURL} = require('./baseURL');
 const url = require('url');
 const { URL } = url;
-/*
-// stt, tts
-const execPromise = str => {
-  return new Promise ((resolve, reject) => {
-    exec(str, (err, stdout, stderr) => {
-      if(err) reject (err);
-      else resolve(stdout);
-  })
-  })
-};
-async function ttsCommand(msg) {
-  var commandLine = 'python3 /root/tts.py ' + msg;
-  await execPromise(commandLine);
-}
-
-async function sttCommand(second) {
-  var ttsCmd = "python3 /root/python-docs-samples/speech/cloud-client/quickstart.py";
-  var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
-  await execPromise(recordCmd);
-  const stdout = await execPromise(ttsCmd);
-  return stdout;
-}
-async function soundCommand(filename){
-  var commandLine = 'mpg321 ~/sound/'+filename;
-  await execPromise(commandLine);
-}
-    
-*/
-
 
 module.exports = {
   naviModule : async function(){
@@ -64,9 +31,7 @@ module.exports = {
     }; 
     // gps value reader  서버와 Http 통신
     async function gpsReader(){
-      
-// const fileName = "/root/gps.txt";
-      // const contents = fs.readFileSync(fileName,신 'utf8');
+  
       const GPS_URL = url.resolve(baseURL, '/gpsartik');
       const gpsUrl = new URL(GPS_URL);
       const gpsOptions = {
@@ -89,9 +54,6 @@ module.exports = {
     const startLongitude = startGps['longitude'];
     console.log('la'+startLatitude);
     console.log('la'+startLongitude);
-    // const startLatitude = 37.49427057802677;
-    // const startLongitude = 126.9562342017889;
-
 
     // 점 사이 거리 구하는 함수
     function distance(lat1, lon1, lat2, lon2) {
@@ -143,7 +105,6 @@ module.exports = {
       const endName = data[0].name;
       const endRpFlag = data[0].rpFlag;
       console.log('목적지 정보 수신 완료 : ' + endName);
-      // console.log(poiResult);
 
       // 목적지 까지의 경로 정보 받기
       naviUrl.searchParams.set('version', 1);
@@ -151,10 +112,7 @@ module.exports = {
       naviUrl.searchParams.set('startY', startLatitude);
       naviUrl.searchParams.set('endX', endLongitude);
       naviUrl.searchParams.set('endY', endLatitude);
-      // naviUrl.searchParams.set('angle', 0 ~ 359); // 방향데이터 => 전송시 어떤 결과를 주는지 알아봐야할 듯
-      // naviUrl.searchParams.set('speed', int값); // 진행속도(km/h)
       naviUrl.searchParams.set('endRpFlag', endRpFlag);
-      // naviUrl.searchParams.set('endPoiId', String); // 목적지 POI ID
       naviUrl.searchParams.set('startName', '우리');
       naviUrl.searchParams.set('endName', endName);
       naviUrl.searchParams.set('sort', 'index'); // 인덱스순 정렬
@@ -176,17 +134,7 @@ module.exports = {
       const totalDistance = naviProperties['totalDistance'];
       const totalTime = naviProperties['totalTime'];
       console.log('경로 정보 수신 완료 : ' + totalDistance + '(m), ' + totalTime + '초 소요 예정');
-      // console.log(naviResult);
-/*
-      searchKeyword = searchKeyword.replace('\n', '');
-      await ttsCommand(searchKeyword + " 맞습니까?");
-      destinationCheck = await sttCommand('2');
-      console.log(destinationCheck);
-      if(destinationCheck.indexOf("아니오")>-1){
-        return; ///거절 시 프로그램 종료
-      }
-      if(destinationCheck.indexOf("아니요")>-1){return;}
-*/
+     
       // 목적지까지의 포인트
       const featureNum = Object.keys(naviJsonObj['features']).length;
       var pointArray = new Array(featureNum);

@@ -4,13 +4,7 @@ const fs = require('fs');
 const request = require('request');
 const url = require('url');
 const { URL } = url;
-
 const {baseURL} = require('./baseURL');
-
-var sys = require('sys');
-var exec = require('child_process').exec;
-function puts(error, stdout, stderr){ sys.puts(stdout); return stdout; }
-
  
 var opts = {
     width: 800,
@@ -26,32 +20,6 @@ var opts = {
 };
 
 var Webcam = NodeWebcam.create(opts);
-/*
-async function ttsCommand(msg) {
-  var commandLine = 'python3 /root/tts.py ' + msg;
-  await execPromise(commandLine);
-}
-  async function sttCommand(second) {
-    var ttsCmd = "python3 /root/python-docs-samples/speech/cloud-client/quickstart.py";
-    var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
-    await execPromise(recordCmd);
-    const stdout = await execPromise(ttsCmd);
-    return stdout;
-  }
-async function soundCommand(filename){
-  var commandLine = 'mpg321 ~/sound/'+filename;
-  await execPromise(commandLine);
-}
-
-const execPromise = str => {
-  return new Promise ((resolve, reject) => {
-    exec(str, (err, stdout, stderr) => {
-      if(err) reject (err);
-      else resolve(stdout);
-  })
-  })
-};
-*/
 const captureImage = path => new Promise ((resolve, reject) => {
   Webcam.capture(path, (err, data) => {
       if (err) reject(err)
@@ -86,21 +54,20 @@ module.exports = {
   },
 
   photoBookModule :async function(){
-      await captureImage('/root/photobook');
-      try{
-        await fileSend(
-          url.resolve(baseURL, '/photobook'),
+    await captureImage('/root/photobook');
+    try{
+      await fileSend(
+        url.resolve(baseURL, '/photobook'),
           'abc',
           '/root/image.jpg',
           'image.jpg'
-         )
-        await command.soundCommand("photoSuccess.mp3");
-      } catch(error){
-        print(error.message);
-        await command.soundCommand("photofail.mp3");
-      }
-
-    },
+        )
+      await command.soundCommand("photoSuccess.mp3");
+    }catch(error){
+    print(error.message);
+    await command.soundCommand("photofail.mp3");
+    }
+  },
 
   objectCamModule : async function(){
     await command.soundCommand("sayObject.mp3");
@@ -143,6 +110,18 @@ module.exports = {
         break;
        }
     }
+  },
+  videoModule : async function(){
+    while(1){
+    await captureImage('/root/video');
+
+    result = await fileSend(
+      url.resolve(baseURL, '/videostream'),
+      'abc',
+      '/root/video.jpg',
+      'video.jpg'
+     )
+  }
   }
 };
 

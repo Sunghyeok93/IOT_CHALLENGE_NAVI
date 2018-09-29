@@ -1,24 +1,12 @@
-command = require('./command');
-video = require('./video');
-navi = require('./index');
-cam = require('./cam');
-sendmail = require('./voicemail');
-checkmail = require('./getmail');
-var sys = require('sys');
+var command = require('./command');
+var navi = require('./index');
+var cam = require('./cam');
+var voicemail = require('./voicemail');
 var buttonPress;
-kakao = require('./kakao');
+var kakao = require('./kakao');
 const tokenFile = '/root/IOT_CHALLENGE_NAVI/token.txt'
 var fs = require('fs');
-/*
-const execPromise = str => {
-  return new Promise ((resolve, reject) => {
-    exec(str, (err, stdout, stderr) => {
-      if(err) reject (err);
-      else resolve(stdout);
-  })
-  })
-};
-*/
+
 function menuCheck(menu){
   if(menu.indexOf("길 찾")>-1){menu= "길 찾기";
   }else if(menu.indexOf("인식")>-1){menu= "물체 인식";
@@ -60,29 +48,6 @@ async function sendKakaoMessage(){
   return;
 }
 
-function sleep(ms){
-  var ts1 = new Date().getTime() + ms;
-  do var ts2 = new Date().getTime(); while (ts2<ts1);
-}
-/*
-async function ttsCommand(msg) {
-  var commandLine = 'python3 /root/tts.py ' + msg;
-  await execPromise(commandLine);
-}
-
-async function sttCommand(second) {
-  var ttsCmd = "python3 /root/python-docs-samples/speech/cloud-client/quickstart.py";
-  var recordCmd = "rec -c 1 -r 16000 /tmp/speech.wav trim 0 " + second;
-  await execPromise(recordCmd);
-  const stdout = await execPromise(ttsCmd);
-  return stdout;
-}
-
-async function soundCommand(filename){
-  var commandLine = 'mpg321 ~/sound/'+filename;
-  await execPromise(commandLine);
-}
-*/
 var Gpio = require('onoff').Gpio
 var buttonGreen = new Gpio(26, 'in', 'both')
 buttonPress = 0;
@@ -123,7 +88,7 @@ buttonBlack.watch(async function (eroor, value){
   }
 })
 
-video.videoModule();
+cam.videoModule();
 
 async function main(){
    try{
@@ -149,11 +114,9 @@ async function main(){
       
       case '없음' : console.log(menu); await command.soundCommand("noCommand.mp3"); main(); break;
 
-// 추가해야할 부분
+      case '사서함 읽기' : console.log(menu); await voicemail.getMailModule(); buttonPress = 0; break;
 
-      case '사서함 읽기' : console.log(menu); await checkmail.getMailModule(); console.log("끝");buttonPress = 0; break;
-
-      case '메시지 보내기' : console.log(menu); await sendmail.sendMailModule(); console.log("끝"); buttonPress = 0;  break;
+      case '메시지 보내기' : console.log(menu); await voicemail.sendMailModule(); buttonPress = 0;  break;
 
       case '종료' : console.log(menu); await command.soundCommand("blackbtn.mp3"); buttonPress = 0; break;
 
