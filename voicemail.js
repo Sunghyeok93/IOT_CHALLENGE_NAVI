@@ -8,6 +8,7 @@ module.exports = {
   sendMailModule: async function () {
     await command.soundCommand("inputMessage.mp3");
     mail = await command.sttCommand('4'); // 메시지 전송 시간 수정 요망됨
+    console.log(mail);
     const MAIL_URL = url.resolve(baseURL, '/voicemail');
     const mailUrl = new URL(MAIL_URL);
     const mailOptions = {
