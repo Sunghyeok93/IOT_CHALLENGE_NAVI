@@ -59,8 +59,8 @@ module.exports = {
       await fileSend(
         url.resolve(baseURL, '/photobook'),
           'abc',
-          '/root/image.jpg',
-          'image.jpg'
+          '/root/photobook.jpg',
+          'photobook.jpg'
         )
       await command.soundCommand("photoSuccess.mp3");
     }catch(error){
@@ -78,6 +78,7 @@ module.exports = {
     destinationCheck = await command.sttCommand('2');
     console.log(destinationCheck);
     if(destinationCheck.indexOf("아니오")>-1||destinationCheck.indexOf("아니요")>-1){
+      await command.soundCommand("brokenObject.mp3");
       return; ///거절 시 프로그램 종료
     }
     console.log("searchKeyword : " + searchKeyword);
@@ -91,6 +92,7 @@ module.exports = {
     };
     const objectNameResult = await request(findOptions);
 
+    check = 0;
     while(1){
       await captureImage('/root/imgae');
       console.log("fileSend 전");
@@ -103,7 +105,12 @@ module.exports = {
        )
        console.log("filesend");
        console.log(result);
+       if(check==5){
+	await command.soundCommand("noObject.mp3");
+	break;
+       }
        if(result==0){
+	check++;
         continue;
        }else{
         await command.ttsCommand(result);

@@ -10,7 +10,9 @@ const KAKAO_REFRESH_URL = 'https://kauth.kakao.com/oauth/token';
 const oauthUrl = new URL(KAKAO_OAUTH_URL);
 const sendUrl = new URL(KAKAO_SEND_URL);
 const refreshUrl = new URL(KAKAO_REFRESH_URL);
-const kakaoCode = 'qVQ7707QppsKADG7tkYC9uLifIsx4w2SBn33wwWCPg_SBMlM6J_f5pLCzfWYWegRkKyHRgopdtYAAAFl7LKjIQ';  // kakao 코드 수정해줘야 할 때 이곳 수정만 하면 됨
+const kakaoCode = 
+'KQIl5iBdSe_ARtU_MbYrheom-C6vg2EkQxB55ip1OslSFt2VcLdhDuLXSYq8gCgM5El1ogoqAq8AAAFmmmOdNg';
+ // kakao 코드 수정해줘야 할 때 이곳 수정만 하면 됨
 
 
 // 한달에 한번 브라우저에서 유저 초기화 해줘서 아래 accessModule()의 code에 값 넣어줄 것.

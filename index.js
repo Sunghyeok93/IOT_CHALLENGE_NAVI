@@ -13,7 +13,8 @@ module.exports = {
     destinationCheck = await command.sttCommand('2');
     console.log(destinationCheck);
     if(destinationCheck.indexOf("아니오")>-1){
-      return; ///거절 시 프로그램 종료
+    	await command.soundCommand("brokenNavi.mp3");
+	return; ///거절 시 프로그램 종료
     }else if(destinationCheck.indexOf("아니요")>-1){return;}
     
     require('dotenv').config();
