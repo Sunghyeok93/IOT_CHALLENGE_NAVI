@@ -94,7 +94,7 @@ module.exports = {
 
     check = 0;
     while(1){
-      await captureImage('/root/imgae');
+      await captureImage('/root/image');
       console.log("fileSend 전");
       result = await fileSend(
         url.resolve(baseURL, '/findobject' ),
